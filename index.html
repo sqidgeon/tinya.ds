@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>tinnyurl.cc - URL Shortener</title>
-    <link rel="icon" type="/" href="favicon.ico">
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
 
     <style>
         body {
@@ -294,7 +294,7 @@
                     <a href="#" target="_blank" class="shortened-link" id="shortLink"></a>
                     <div class="original-display">Redirects to: <span id="originalText"></span></div>
                 </div>
-                <div class="powered-by">powered by short.io</div>
+                <div class="powered-by">powered by short.cm (custom domain l.tinnyurl.cc)</div>
             </div>
 
             <div id="support" class="tab-content">
@@ -316,7 +316,7 @@
                     <span class="arrow">→</span>
                 </button>
                 <div class="result" id="result-support">
-                    Your shortened link:
+                    Your shortened link (The link below will redirect to a shorter link, copy that):
                     <a href="#" target="_blank" class="shortened-link" id="shortLink-support"></a>
                     <div class="original-display">Redirects to: <span id="originalText-support"></span></div>
                 </div>
@@ -474,8 +474,7 @@
                 const originalUrl = normalizeUrl(input.value);
                 if (!originalUrl) return alert('Please enter a valid URL');
 
-                const base = 'http://adfoc.us/serve/sitelinks/?id=874336&url=';
-                const shortened = base + encodeURIComponent(originalUrl);
+                const shortened = 'http://adfoc.us/serve/sitelinks/?id=874336&url=' + originalUrl;
 
                 const linkEl = document.getElementById('shortLink-support');
                 const originalText = document.getElementById('originalText-support');
