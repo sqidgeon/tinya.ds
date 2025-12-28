@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Sqidgeon Link Shortener</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<style>
+  body {
+    margin: 0;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #0f172a;
+    font-family: Arial, sans-serif;
+    color: #e5e7eb;
+  }
+
+  .container {
+    background: #020617;
+    padding: 24px;
+    border-radius: 12px;
+    width: 100%;
+    max-width: 420px;
+    box-shadow: 0 15px 40px rgba(0,0,0,0.5);
+  }
+
+  h1 {
+    text-align: center;
+    margin-bottom: 16px;
+    font-size: 1.4rem;
+  }
+
+  input {
+    width: 100%;
+    padding: 10px;
+    border-radius: 8px;
+    border: none;
+    outline: none;
+    font-size: 0.95rem;
+    margin-bottom: 12px;
+  }
+
+  button {
+    width: 100%;
+    padding: 10px;
+    border-radius: 8px;
+    border: none;
+    background: #2563eb;
+    color: white;
+    font-size: 1rem;
+    cursor: pointer;
+  }
+
+  button:hover {
+    background: #1d4ed8;
+  }
+
+  .error {
+    color: #f87171;
+    font-size: 0.9rem;
+    display: none;
+    margin-top: 8px;
+  }
+
+  .result {
+    margin-top: 16px;
+    background: #020617;
+    padding: 10px;
+    border-radius: 8px;
+    word-break: break-all;
+    display: none;
+  }
+
+  a {
+    color: #60a5fa;
+    text-decoration: none;
+  }
+</style>
+</head>
+
+<body>
+<div class="container">
+  <h1>Sqidgeon Link Shortener</h1>
+
+  <input id="urlInput" type="text" placeholder="https://youtube.com">
+
+  <button onclick="shorten()">Generate Link</button>
+
+  <div id="error" class="error">
+    URL must start with http:// or https://
+  </div>
+
+  <div id="result" class="result"></div>
+</div>
+
+<script>
+  const BASE =
+    "http://ad.sqidgeon.uk/serve/sitelinks/?id=874336&url=";
+
+  function shorten() {
+    const input = document.getElementById("urlInput").value.trim();
+    const error = document.getElementById("error");
+    const result = document.getElementById("result");
+
+    error.style.display = "none";
+    result.style.display = "none";
+
+    // Only allow http:// or https://
+    if (!/^https?:\/\//i.test(input)) {
+      error.style.display = "block";
+      return;
+    }
+
+    // IMPORTANT: URL is appended EXACTLY as entered
+    const finalLink = BASE + input;
+
+    result.innerHTML = `
+      <strong>Final link:</strong><br>
+      <a href="${finalLink}" target="_blank">${finalLink}</a>
+    `;
+    result.style.display = "block";
+  }
+</script>
+</body>
+</html>
