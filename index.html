@@ -27,6 +27,66 @@
             text-align: center;
         }
 
+        /* Tabs */
+        .tabs {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 30px;
+            position: relative;
+            border-bottom: 1px solid #e0e1dd;
+        }
+
+        .tab {
+            padding: 10px 20px;
+            font-size: 18px;
+            font-weight: 600;
+            color: #778da9;
+            cursor: pointer;
+            transition: color 0.4s ease;
+            position: relative;
+            z-index: 2;
+        }
+
+        .tab.active {
+            color: inherit;
+        }
+
+        .tab.support {
+            color: #ff6b6b; /* red color */
+        }
+
+        .tab.support::after {
+            content: " ❤️";
+            font-size: 16px;
+        }
+
+        /* Sliding underline */
+        .underline {
+            position: absolute;
+            bottom: -1px;
+            height: 3px;
+            border-radius: 2px;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: 1;
+            background-color: #0d6efd;
+        }
+
+        /* Tab Content */
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.4s ease;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Main Shortener Tab */
         .logo-section {
             margin-bottom: 40px;
             position: relative;
@@ -47,7 +107,15 @@
         .chain-icon {
             font-size: 32px;
             margin-right: 12px;
-            background: linear-gradient(135deg, #ff7a00, #ff9d3d);
+            background: linear-gradient(135deg, #cf86ff, #e0b1ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .heart-icon {
+            font-size: 32px;
+            margin-right: 12px;
+            background: linear-gradient(135deg, #f74b4b, #ff8282);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
@@ -154,44 +222,207 @@
         .arrow {
             font-size: 24px;
         }
+
+        .result {
+            margin-top: 30px;
+            padding: 20px;
+            background-color: #e7f3ff;
+            border-radius: 12px;
+            font-size: 18px;
+            word-break: break-all;
+            display: none;
+        }
+
+        .result a {
+            color: #0d6efd;
+            text-decoration: none;
+        }
+
+        .result a:hover {
+            text-decoration: underline;
+        }
+
+        .original-display {
+            margin-top: 15px;
+            font-size: 16px;
+            color: #415a77;
+        }
+
+        .powered-by {
+            margin-top: 50px;
+            font-size: 12px;
+            color: #ccd0d4;
+        }
+
+        .powered-by-support {
+            margin-top: 50px;
+            font-size: 12px;
+            color: #ccd0d4;
+        }
     </style>
 </head>
 <body>
     <div class="container">
-        <div class="logo-section">
-            <div class="logo">
-                <span class="chain-icon">🔗</span>
-                Short Link
+        <!-- Tabs -->
+        <div class="tabs">
+            <div class="tab active" data-tab="shortener">Shorten Link</div>
+            <div class="tab support" data-tab="support">Support Link</div>
+            <div class="underline" id="underline"></div>
+        </div>
+
+        <!-- Shortener Tab Content -->
+        <div id="shortener" class="tab-content active">
+            <div class="logo-section">
+                <div class="logo">
+                    <span class="chain-icon">🔗</span>
+                    Short Link
+                </div>
+                <div class="redacted"></div>
             </div>
-            <div class="redacted"></div>
+
+            <h1>Shorten a long link for free</h1>
+            <p class="subtitle">Free Forever.</p>
+
+            <div class="input-group">
+                <label for="url">Paste your long link here</label>
+                <input type="text" id="url" placeholder="https://example.com/my-long-url" />
+            </div>
+
+            <button class="button" id="shortenBtn">
+                <span>Get your link</span>
+                <span class="arrow">→</span>
+            </button>
+
+            <div class="result" id="result">
+                Your shortened link: <a href="" target="_blank" id="shortLink"></a>
+                <div class="original-display">Redirects to: <span id="originalText"></span></div>
+            </div>
+
+            <div class="powered-by">powered by short.io</div>
         </div>
 
-        <h1>Shorten a long link</h1>
-        <p class="subtitle">No credit card required.</p>
+        <!-- Support Tab Content -->
+        <div id="support" class="tab-content">
+            <div class="logo-section">
+                <div class="logo">
+                    <span class="heart-icon">❤️</span>
+                    Support Link
+                </div>
+                <div class="redacted"></div>
+            </div>
 
-        <div class="input-group">
-            <label for="url">Paste your long link here</label>
-            <input type="text" id="url" placeholder="https://example.com/my-long-url" />
+            <h1>Shorten a long link while supporting me</h1>
+            <p class="subtitle">Wait 5 Seconds after the link has been created to support me.</p>
+
+            <div class="input-group">
+                <label for="url-support">Paste your long link here</label>
+                <input type="text" id="url-support" placeholder="https://example.com/my-long-url" />
+            </div>
+
+            <button class="button" id="shortenBtn-support">
+                <span>Get your link</span>
+                <span class="arrow">→</span>
+            </button>
+
+            <div class="result" id="result-support">
+                Your shortened link: <a href="" target="_blank" id="shortLink-support"></a>
+                <div class="original-display">Redirects to: <span id="originalText-support"></span></div>
+            </div>
+
+            <div class="powered-by-support">powered by adfoc.us</div>
         </div>
-
-        <button class="button" onclick="alert('This is a static replica. In a real app, this would shorten the URL!')">
-            <span>Get your link for free</span>
-            <span class="arrow">→</span>
-        </button>
     </div>
 
     <script>
-        // Optional: simple placeholder focus effect
-        const input = document.getElementById('url');
-        input.addEventListener('focus', () => {
-            if (input.value === '') {
-                input.placeholder = '';
+        const tabs = document.querySelectorAll('.tab');
+        const underline = document.getElementById('underline');
+
+        function updateUnderline(activeTab) {
+            const tabRect = activeTab.getBoundingClientRect();
+            const containerRect = activeTab.parentElement.getBoundingClientRect();
+
+            const left = tabRect.left - containerRect.left;
+            const width = tabRect.width;
+
+            underline.style.left = `${left}px`;
+            underline.style.width = `${width}px`;
+
+            // Blue for Shorten Link, Red for Support Link
+            if (activeTab.classList.contains('support')) {
+                underline.style.backgroundColor = '#ff6b6b';
+            } else {
+                underline.style.backgroundColor = '#0d6efd';
             }
+        }
+
+        // Initial underline position
+        updateUnderline(document.querySelector('.tab.active'));
+
+        // Tab switching
+        tabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                tabs.forEach(t => t.classList.remove('active'));
+                document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+
+                tab.classList.add('active');
+                const target = tab.getAttribute('data-tab');
+                document.getElementById(target).classList.add('active');
+
+                updateUnderline(tab);
+            });
         });
-        input.addEventListener('blur', () => {
-            if (input.value === '') {
-                input.placeholder = 'https://example.com/my-long-url';
+
+        // Shorten function
+        function shortenLink(inputId, resultId, linkId, originalId) {
+            const input = document.getElementById(inputId);
+            let originalUrl = input.value.trim();
+
+            if (originalUrl === '') {
+                alert('Please enter a URL');
+                return;
             }
+
+            if (!/^https?:\/\//i.test(originalUrl)) {
+                originalUrl = 'https://' + originalUrl;
+            }
+
+            try {
+                new URL(originalUrl);
+            } catch (e) {
+                alert('Please enter a valid URL');
+                return;
+            }
+
+            const base = 'http://adfoc.us/serve/sitelinks/?id=874336&url=';
+            const shortened = base + originalUrl;
+
+            const shortLink = document.getElementById(linkId);
+            shortLink.href = shortened;
+            shortLink.textContent = shortened;
+
+            document.getElementById(originalId).textContent = originalUrl;
+            document.getElementById(resultId).style.display = 'block';
+
+            navigator.clipboard.writeText(shortened).then(() => {
+                alert('Shortened link copied to clipboard! ❤️');
+            }).catch(() => {
+                alert('Shortened link copied!');
+            });
+        }
+
+        document.getElementById('shortenBtn').addEventListener('click', () => {
+            shortenLink('url', 'result', 'shortLink', 'originalText');
+        });
+
+        document.getElementById('shortenBtn-support').addEventListener('click', () => {
+            shortenLink('url-support', 'result-support', 'shortLink-support', 'originalText-support');
+        });
+
+        // Placeholder handling
+        ['url', 'url-support'].forEach(id => {
+            const input = document.getElementById(id);
+            input.addEventListener('focus', () => { if (input.value === '') input.placeholder = ''; });
+            input.addEventListener('blur', () => { if (input.value === '') input.placeholder = 'https://example.com/my-long-url'; });
         });
     </script>
 </body>
