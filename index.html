@@ -55,6 +55,10 @@
             box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
         }
 
+        .badge:hover {
+            transform: scale(1.1);
+        }
+
         .container {
             background-color: #f8f9fa;
             border-radius: 24px;
@@ -84,6 +88,7 @@
             background-color: #334155;
             border-color: #475569;
             color: #e2e8f0;
+            transition: background-color 0.5s ease, color 0.5s ease;
         }
 
         body.dark-mode input[type="text"]::placeholder {
@@ -141,7 +146,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            transition: all 0.3s ease;
+            transition: all 0.5s ease;
             z-index: 10;
         }
 
@@ -179,7 +184,6 @@
             justify-content: center;
             margin-bottom: 24px;
             position: relative;
-            border-bottom: 1px solid #e0e1dd;
             flex-wrap: wrap;
             gap: 8px;
         }
@@ -207,8 +211,6 @@
             color: #28a745;
         }
 
-        .tab.support::after { content: " ❤️"; font-size: 15px; }
-
         .underline {
             position: absolute;
             bottom: -1px;
@@ -234,15 +236,34 @@
             font-size: 19px;
             font-weight: 600;
             color: #1b263b;
+            transition: all 0.5s ease;
         }
 
-        .chain-icon, .heart-icon { font-size: 28px; margin-right: 10px; }
-        .chain-icon { background: linear-gradient(135deg, #cf86ff, #e0b1ff); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        .heart-icon { background: linear-gradient(135deg, #f74b4b, #ff8282); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        body.dark-mode .logo {
+            background-color: #2c405e;
+        }
+
+        .logo:hover {
+            transform: scale(1.1);
+        }
 
         .qr-icon-svg {
-            width: 28px;
-            height: 28px;
+            width: 37px;
+            height: 37px;
+            margin-right: 10px;
+            vertical-align: middle;
+        }
+
+        .chain-icon-svg {
+            width: 35px;
+            height: 35px;
+            margin-right: 10px;
+            vertical-align: middle;
+        }
+
+        .heart-icon-svg {
+            width: 33px;
+            height: 33px;
             margin-right: 10px;
             vertical-align: middle;
         }
@@ -251,7 +272,7 @@
             position: absolute;
             top: 8px;
             right: -30px;
-            background-color: #dc3545;
+            background-color: #ff6b6b;
             width: 120px;
             height: 34px;
             border-radius: 8px;
@@ -259,6 +280,50 @@
         }
 
         .redacted::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) rotate(-30deg);
+            width: 140px;
+            height: 18px;
+            background: repeating-linear-gradient(45deg, transparent, transparent 10px, rgba(0,0,0,0.3) 10px, rgba(0,0,0,0.3) 20px);
+        }
+
+        .redactedblue {
+            position: absolute;
+            top: 8px;
+            right: -30px;
+            background-color: #0d6efd;
+            width: 120px;
+            height: 34px;
+            border-radius: 8px;
+            transform: rotate(15deg);
+        }
+
+        .redactedblue::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) rotate(-30deg);
+            width: 140px;
+            height: 18px;
+            background: repeating-linear-gradient(45deg, transparent, transparent 10px, rgba(0,0,0,0.3) 10px, rgba(0,0,0,0.3) 20px);
+        }
+
+        .redactedgreen {
+            position: absolute;
+            top: 8px;
+            right: -30px;
+            background-color: #28a745;
+            width: 120px;
+            height: 34px;
+            border-radius: 8px;
+            transform: rotate(15deg);
+        }
+
+        .redactedgreen::before {
             content: '';
             position: absolute;
             top: 50%;
@@ -284,6 +349,7 @@
             background-color: #ffffff;
             color: #1b263b;
             box-sizing: border-box;
+            transition: background-color 0.5s ease, color 0.5s ease;
         }
 
         input[type="text"]::placeholder { color: #778da9; }
@@ -300,16 +366,13 @@
             cursor: pointer;
             display: inline-flex;
             align-items: center;
-            box-shadow: 0 8px 20px rgba(13, 110, 253, 0.3);
-            transition: all 0.3s ease;
+            transition: all 0.5s ease;
             width: 100%;
             justify-content: center;
         }
 
         .button:hover {
-            background-color: #0b5ed7;
-            transform: translateY(-2px);
-            box-shadow: 0 12px 24px rgba(13, 110, 253, 0.4);
+            transform: scale(1.05);
         }
 
         .button span { margin-right: 10px; }
@@ -347,8 +410,8 @@
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            width: 40px;
-            height: 40px;
+            width: 50px;
+            height: 50px;
             background-color: #ffffff;
             border-radius: 50%;
             box-shadow: 0 2px 8px rgba(0,0,0,0.15);
@@ -443,7 +506,6 @@
             .button { font-size: 18px; padding: 14px 32px; }
             .tab { font-size: 16px; padding: 8px 14px; }
             .logo { font-size: 18px; padding: 8px 16px; }
-            .chain-icon, .heart-icon { font-size: 26px; }
             .qr-icon-wrapper { width: 36px; height: 36px; }
             .qr-icon-result { width: 22px; height: 22px; }
         }
@@ -453,7 +515,7 @@
     <div class="stars" id="stars"></div>
 
     <div class="wrapper">
-        <div class="badge">tinnyurl.cc</div>
+        <a href="youtube.com" style="text-decoration: none;"><div class="badge">tinnyurl.cc</div></a>
 
         <div class="container">
             <div class="theme-toggle" id="themeToggle">
@@ -471,10 +533,10 @@
             <div id="shortener" class="tab-content active">
                 <div class="logo-section">
                     <div class="logo">
-                        <span class="chain-icon">🔗</span>
-                        Shorten Link
+                        <img class="chain-icon-svg" src="https://www.tinnyurl.cc/cdn/linkblue.svg">
+                        <div style="color: #0d6efd;">Shorten Link</div>
                     </div>
-                    <div class="redacted"></div>
+                    <div class="redactedblue"></div>
                 </div>
                 <h1>Shorten a long link for free</h1>
                 <p class="subtitle">Free Forever.</p>
@@ -484,7 +546,6 @@
                 </div>
                 <button class="button" id="shortenBtn">
                     <span>Get your link</span>
-                    <span class="arrow">→</span>
                 </button>
                 <div class="result" id="result">
                     Your shortened link:
@@ -496,14 +557,14 @@
                     </div>
                     <div class="original-display">Redirects to: <span id="originalText"></span></div>
                 </div>
-                <div class="powered-by">powered by adfoc.us + short.cm</div>
+                <div class="powered-by">powered by adfoc.us + short.io</div>
             </div>
 
             <div id="support" class="tab-content">
                 <div class="logo-section">
                     <div class="logo">
-                        <span class="heart-icon">❤️</span>
-                        Support Link
+                        <img class="heart-icon-svg" src="https://www.tinnyurl.cc/cdn/heartred.svg">
+                    <div style="color: #ff6b6b;">Support Link</div>
                     </div>
                     <div class="redacted"></div>
                 </div>
@@ -513,9 +574,8 @@
                     <label for="url-support">Paste your long link here</label>
                     <input type="text" id="url-support" placeholder="https://example.com/my-long-url" />
                 </div>
-                <button class="button" id="shortenBtn-support">
+                <button class="button" id="shortenBtn-support" style="background-color: #ff6b6b;">
                     <span>Get your link</span>
-                    <span class="arrow">→</span>
                 </button>
                 <div class="result" id="result-support">
                     Your support link:
@@ -527,16 +587,16 @@
                     </div>
                     <div class="original-display">Redirects to: <span id="originalText-support"></span></div>
                 </div>
-                <div class="powered-by">powered by adfoc.us + short.cm</div>
+                <div class="powered-by">powered by adfoc.us + short.io</div>
             </div>
 
             <div id="qr" class="tab-content">
                 <div class="logo-section">
                     <div class="logo">
-                        <img class="qr-icon-svg" src="https://www.svgrepo.com/show/511108/qr-code.svg" alt="QR">
-                        QR Code
+                        <img class="qr-icon-svg" src="https://www.tinnyurl.cc/cdn/qrcodegreen.svg" alt="QR">
+                        <div style="color: #28a745;">QR Code</div>
                     </div>
-                    <div class="redacted"></div>
+                    <div class="redactedgreen"></div>
                 </div>
                 <h1>Get a QR code for your link</h1>
                 <p class="subtitle">Shorten a link and get a qr-code.</p>
@@ -544,9 +604,8 @@
                     <label for="url-qr">Paste your long link here</label>
                     <input type="text" id="url-qr" placeholder="https://example.com/my-long-url" />
                 </div>
-                <button class="button" id="shortenBtn-qr">
+                <button class="button" id="shortenBtn-qr" style="background-color: #28a745;">
                     <span>Get QR code</span>
-                    <span class="arrow">→</span>
                 </button>
                 <div class="result" id="result-qr">
                     <img id="qrCode-qr" class="qr-code" src="" alt="QR Code" style="display:none;" />
@@ -554,11 +613,12 @@
                     <a href="#" target="_blank" class="shortened-link" id="shortLink-qr"></a>
                     <div class="original-display">Redirects to: <span id="originalText-qr"></span></div>
                 </div>
-                <div class="powered-by">powered by adfoc.us + short.cm</div>
+                <div class="powered-by">powered by adfoc.us + short.io
+                </div>
             </div>
 
             <div class="footer-credit">
-                Coded with ❤️ by <a href="https://cwl.sqidgeon.uk" target="_blank">sqidgeon</a>
+                Coded with ❤️ by <a href="https://cwl.sqidgeon.uk" target="_blank">sqidgeon</a> V1.5
             </div>
         </div>
     </div>
