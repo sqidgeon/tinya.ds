@@ -20,7 +20,7 @@
             transition: background-color 0.5s ease;
             overflow-x: hidden;
             position: relative;
-            padding-top: 20px; /* Space for mobile */
+            padding-top: 20px;
         }
 
         body.dark-mode {
@@ -91,7 +91,7 @@
         }
 
         body.dark-mode .result {
-            background-color: #1e40af;
+            background-color: #2f4178;
         }
 
         body.dark-mode .original-display {
@@ -195,8 +195,18 @@
             z-index: 2;
         }
 
-        .tab.active { color: inherit; }
-        .tab.support { color: #ff6b6b; }
+        .tab.active {
+            color: #0d6efd;
+        }
+
+        .tab.support.active {
+            color: #ff6b6b;
+        }
+
+        .tab.qr.active {
+            color: #28a745;
+        }
+
         .tab.support::after { content: " ❤️"; font-size: 15px; }
 
         .underline {
@@ -229,6 +239,13 @@
         .chain-icon, .heart-icon { font-size: 28px; margin-right: 10px; }
         .chain-icon { background: linear-gradient(135deg, #cf86ff, #e0b1ff); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
         .heart-icon { background: linear-gradient(135deg, #f74b4b, #ff8282); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+
+        .qr-icon-svg {
+            width: 28px;
+            height: 28px;
+            margin-right: 10px;
+            vertical-align: middle;
+        }
 
         .redacted {
             position: absolute;
@@ -306,11 +323,11 @@
             font-size: 17px;
             word-break: break-all;
             display: none;
-            text-align: left;
+            text-align: center;
         }
 
         .shortened-link {
-            color: #0d6efd;
+            color: #5e9fff;
             text-decoration: none;
             cursor: pointer;
             padding: 8px 12px;
@@ -324,6 +341,53 @@
         .shortened-link:hover {
             background-color: rgba(13, 110, 253, 0.1);
             text-decoration: underline;
+        }
+
+        .qr-icon-wrapper {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            background-color: #ffffff;
+            border-radius: 50%;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+            margin-right: 12px;
+            cursor: pointer;
+            transition: transform 0.2s ease;
+        }
+
+        .qr-icon-wrapper:hover {
+            transform: scale(1.1);
+        }
+
+        body.dark-mode .qr-icon-wrapper {
+            background-color: #2f4178;
+        }
+
+        .qr-icon-result {
+            width: 24px;
+            height: 24px;
+        }
+
+        .result-link-wrapper {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-top: 12px;
+        }
+
+        .qr-code {
+            margin: 20px auto;
+            max-width: 300px;
+            display: block;
+            border: 10px solid #ffffff;
+            border-radius: 16px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+        }
+
+        body.dark-mode .qr-code {
+            border-color: #ffffff;
         }
 
         .original-display { margin-top: 14px; font-size: 15px; color: #415a77; }
@@ -371,7 +435,6 @@
 
         .copy-toast.show { opacity: 1; }
 
-        /* Mobile-specific adjustments */
         @media (max-width: 480px) {
             .badge { font-size: 18px; padding: 10px 24px; }
             .container { padding: 24px 20px; }
@@ -381,6 +444,8 @@
             .tab { font-size: 16px; padding: 8px 14px; }
             .logo { font-size: 18px; padding: 8px 16px; }
             .chain-icon, .heart-icon { font-size: 26px; }
+            .qr-icon-wrapper { width: 36px; height: 36px; }
+            .qr-icon-result { width: 22px; height: 22px; }
         }
     </style>
 </head>
@@ -399,6 +464,7 @@
             <div class="tabs">
                 <div class="tab active" data-tab="shortener">Shorten Link</div>
                 <div class="tab support" data-tab="support">Support Link</div>
+                <div class="tab qr" data-tab="qr">QR Code</div>
                 <div class="underline" id="underline"></div>
             </div>
 
@@ -422,7 +488,12 @@
                 </button>
                 <div class="result" id="result">
                     Your shortened link:
-                    <a href="#" target="_blank" class="shortened-link" id="shortLink"></a>
+                    <div class="result-link-wrapper">
+                        <div class="qr-icon-wrapper" onclick="switchToQrTab('url')">
+                            <img class="qr-icon-result" src="https://www.svgrepo.com/show/511108/qr-code.svg" alt="QR">
+                        </div>
+                        <a href="#" target="_blank" class="shortened-link" id="shortLink"></a>
+                    </div>
                     <div class="original-display">Redirects to: <span id="originalText"></span></div>
                 </div>
                 <div class="powered-by">powered by adfoc.us + short.cm</div>
@@ -448,8 +519,40 @@
                 </button>
                 <div class="result" id="result-support">
                     Your support link:
-                    <a href="#" target="_blank" class="shortened-link" id="shortLink-support"></a>
+                    <div class="result-link-wrapper">
+                        <div class="qr-icon-wrapper" onclick="switchToQrTab('url-support')">
+                            <img class="qr-icon-result" src="https://www.svgrepo.com/show/511108/qr-code.svg" alt="QR">
+                        </div>
+                        <a href="#" target="_blank" class="shortened-link" id="shortLink-support"></a>
+                    </div>
                     <div class="original-display">Redirects to: <span id="originalText-support"></span></div>
+                </div>
+                <div class="powered-by">powered by adfoc.us + short.cm</div>
+            </div>
+
+            <div id="qr" class="tab-content">
+                <div class="logo-section">
+                    <div class="logo">
+                        <img class="qr-icon-svg" src="https://www.svgrepo.com/show/511108/qr-code.svg" alt="QR">
+                        QR Code
+                    </div>
+                    <div class="redacted"></div>
+                </div>
+                <h1>Get a QR code for your link</h1>
+                <p class="subtitle">Shorten a link and get a qr-code.</p>
+                <div class="input-group">
+                    <label for="url-qr">Paste your long link here</label>
+                    <input type="text" id="url-qr" placeholder="https://example.com/my-long-url" />
+                </div>
+                <button class="button" id="shortenBtn-qr">
+                    <span>Get QR code</span>
+                    <span class="arrow">→</span>
+                </button>
+                <div class="result" id="result-qr">
+                    <img id="qrCode-qr" class="qr-code" src="" alt="QR Code" style="display:none;" />
+                    <div style="margin-top: 20px;">Your shortened link:</div>
+                    <a href="#" target="_blank" class="shortened-link" id="shortLink-qr"></a>
+                    <div class="original-display">Redirects to: <span id="originalText-qr"></span></div>
                 </div>
                 <div class="powered-by">powered by adfoc.us + short.cm</div>
             </div>
@@ -503,12 +606,25 @@
             const themeToggle = document.getElementById('themeToggle');
             if (localStorage.getItem('darkMode') === 'true') {
                 document.body.classList.add('dark-mode');
+                updateQrIcons();
             }
 
             themeToggle.addEventListener('click', () => {
                 document.body.classList.toggle('dark-mode');
                 localStorage.setItem('darkMode', document.body.classList.contains('dark-mode'));
+                updateQrIcons();
             });
+
+            function updateQrIcons() {
+                const isDark = document.body.classList.contains('dark-mode');
+                const darkSvg = "data:image/svg+xml,%3Csvg viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg' stroke='%23ffffff'%3E%3Cg id='SVGRepo_bgCarrier' stroke-width='0'%3E%3C/g%3E%3Cg id='SVGRepo_tracerCarrier' stroke-linecap='round' stroke-linejoin='round'%3E%3C/g%3E%3Cg id='SVGRepo_iconCarrier'%3E %3Cpath id='Vector' d='M19 20h2v-2m-1-16 2 2h-1.4m-4 1.7 1.4-1.4m-4 1.4-1.4-1.4m-4 1.4-1.4 1.4m-1.6 4.9c4 1.6.0679 4 1.5 4.1522 4.1522 4.2344 4.1522 5.23438 4.1522 5.23438 4.2344 4.1522 5.23438 4.1522 5.23438 4.1522 4.1522 5.2344 4.1522 6.06812 4.1522 7c4.1522 9.9999 4.1522 9.9999 4.1522 16.0681 4.1522 17c4.1522 17.9 4.1522 18.3 4.1522 18.7c4.1522 9.6447 4.1522 9.2554 4.1522 9.2554 4.1522 8.3981 4.1522 7.93162 4.1522 6.9999c4.1522 4.1522 4.1522 4.1522 4.1522 4.1522z' stroke='%23ffffff' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3C/path%3E %3C/g%3E%3C/svg%3E";
+                const lightSvg = "https://www.svgrepo.com/show/511108/qr-code.svg";
+
+                const icons = document.querySelectorAll('.qr-icon-result');
+                icons.forEach(icon => {
+                    icon.src = isDark ? darkSvg : lightSvg;
+                });
+            }
 
             const tabs = document.querySelectorAll('.tab');
             const underline = document.getElementById('underline');
@@ -520,7 +636,14 @@
                 const width = tabRect.width;
                 underline.style.left = `${left}px`;
                 underline.style.width = `${width}px`;
-                underline.style.backgroundColor = activeTab.classList.contains('support') ? '#ff6b6b' : '#0d6efd';
+
+                if (activeTab.classList.contains('support')) {
+                    underline.style.backgroundColor = '#ff6b6b';
+                } else if (activeTab.classList.contains('qr')) {
+                    underline.style.backgroundColor = '#28a745';
+                } else {
+                    underline.style.backgroundColor = '#0d6efd';
+                }
             }
 
             updateUnderline(document.querySelector('.tab.active'));
@@ -535,6 +658,20 @@
                 });
             });
 
+            function switchToQrTab(inputId) {
+                const qrTab = document.querySelector('.tab[data-tab="qr"]');
+                qrTab.click();
+
+                const qrInput = document.getElementById('url-qr');
+                const sourceInput = document.getElementById(inputId);
+                qrInput.value = sourceInput.value;
+
+                // Trigger QR generation if there's already a value
+                if (qrInput.value.trim()) {
+                    document.getElementById('shortenBtn-qr').click();
+                }
+            }
+
             const toast = document.getElementById('copyToast');
             function showToast() {
                 toast.classList.add('show');
@@ -547,16 +684,19 @@
 
             function setupCopyOnClick(linkId) {
                 const linkEl = document.getElementById(linkId);
-                linkEl.addEventListener('click', (e) => {
-                    if (linkEl.href && linkEl.href !== '#') {
-                        e.preventDefault();
-                        copyToClipboard(linkEl.href);
-                    }
-                });
+                if (linkEl) {
+                    linkEl.addEventListener('click', (e) => {
+                        if (linkEl.href && linkEl.href !== '#') {
+                            e.preventDefault();
+                            copyToClipboard(linkEl.href);
+                        }
+                    });
+                }
             }
 
             setupCopyOnClick('shortLink');
             setupCopyOnClick('shortLink-support');
+            setupCopyOnClick('shortLink-qr');
 
             function normalizeUrl(url) {
                 if (!url.trim()) return null;
@@ -565,7 +705,7 @@
                 try { new URL(normalized); return normalized; } catch { return null; }
             }
 
-            async function createSupportShortLink(inputId, resultId, linkId, textId) {
+            async function createSupportShortLink(inputId, resultId, linkId, textId, qrId = null) {
                 const input = document.getElementById(inputId);
                 const originalUrl = normalizeUrl(input.value);
                 if (!originalUrl) return alert('Please enter a valid URL');
@@ -573,11 +713,13 @@
                 const resultDiv = document.getElementById(resultId);
                 const linkEl = document.getElementById(linkId);
                 const originalText = document.getElementById(textId);
+                const qrImg = qrId ? document.getElementById(qrId) : null;
 
                 resultDiv.style.display = 'block';
                 linkEl.textContent = 'Creating link...';
                 linkEl.href = '#';
                 originalText.textContent = originalUrl;
+                if (qrImg) qrImg.style.display = 'none';
 
                 const adfocBase = 'http://adfoc.us/serve/sitelinks/?id=874336&url=';
                 const adfocUrl = adfocBase + originalUrl;
@@ -597,6 +739,12 @@
                     linkEl.href = finalShortUrl;
                     linkEl.textContent = finalShortUrl;
                     copyToClipboard(finalShortUrl);
+
+                    if (qrImg) {
+                        qrImg.src = `https://api.qrserver.com/v1/create-qr-code/?data=${encodeURIComponent(finalShortUrl)}&size=300x300`;
+                        qrImg.style.display = 'block';
+                    }
+
                     input.value = '';
                 } catch {
                     linkEl.textContent = 'Error – try again';
@@ -612,10 +760,16 @@
                 await createSupportShortLink('url-support', 'result-support', 'shortLink-support', 'originalText-support');
             });
 
-            ['url', 'url-support'].forEach(id => {
+            document.getElementById('shortenBtn-qr').addEventListener('click', async () => {
+                await createSupportShortLink('url-qr', 'result-qr', 'shortLink-qr', 'originalText-qr', 'qrCode-qr');
+            });
+
+            ['url', 'url-support', 'url-qr'].forEach(id => {
                 const input = document.getElementById(id);
-                input.addEventListener('focus', () => { if (!input.value) input.placeholder = ''; });
-                input.addEventListener('blur', () => { if (!input.value) input.placeholder = 'https://example.com/my-long-url'; });
+                if (input) {
+                    input.addEventListener('focus', () => { if (!input.value) input.placeholder = ''; });
+                    input.addEventListener('blur', () => { if (!input.value) input.placeholder = 'https://example.com/my-long-url'; });
+                }
             });
         });
     </script>
