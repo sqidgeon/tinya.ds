@@ -891,37 +891,33 @@
 <div id="container-f61aad515a717738d5203cd2761b88bc"></div>
 
 <script>
-  document.body.classList.add("adblock-locked");
+  document.documentElement.classList.add("locked");
 
-  // Fast adblock detection (does NOT wait for ad load)
   setTimeout(function () {
+    // Bait element (name still triggers blockers, but overlay won't be blocked)
     const bait = document.createElement("div");
-    bait.className = "adsbox ad-banner ad-unit";
-    bait.style.height = "1px";
+    bait.className = "adsbox banner-unit sponsor";
+    bait.style.cssText = "height:1px;position:absolute;left:-9999px;";
     document.body.appendChild(bait);
 
     const blocked = bait.offsetHeight === 0;
     bait.remove();
 
-    const overlay = document.getElementById("adblock-overlay");
-    const title = document.getElementById("adblock-title");
-    const text = document.getElementById("adblock-text");
+    const guard = document.getElementById("page-guard");
+    const title = document.getElementById("guard-title");
+    const text = document.getElementById("guard-text");
 
     if (blocked) {
-      // Ad blocker ON — keep page locked
-      title.innerText = "Please disable your ad blocker";
+      title.textContent = "Please disable your ad blocker";
       text.innerHTML =
-        "This site cannot be used while an ad blocker is enabled.<br>Please disable it and refresh the page.";
+        "This site cannot be used while an ad blocker is enabled.<br>Disable it and refresh the page.";
     } else {
-      // No ad blocker — allow access
-      overlay.classList.add("fade-out");
-      document.body.classList.remove("adblock-locked");
+      guard.classList.add("fade-out");
+      document.documentElement.classList.remove("locked");
 
-      setTimeout(() => {
-        overlay.remove();
-      }, 600);
+      setTimeout(() => guard.remove(), 600);
     }
-  }, 800); // short loading delay
+  }, 600);
 </script>
 
 </body>
