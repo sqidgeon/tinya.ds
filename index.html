@@ -872,11 +872,33 @@
             });
         });
     </script>
-<script async data-cfasync="false"
-  src="https://pl28509505.effectivegatecpm.com/f61aad515a717738d5203cd2761b88bc/invoke.js">
-</script>
+<!-- Bottom Ad Container -->
+<div id="bottom-container">
+  <script async data-cfasync="false"
+    src="https://pl28509505.effectivegatecpm.com/f61aad515a717738d5203cd2761b88bc/invoke.js">
+  </script>
 
-<div id="container-f61aad515a717738d5203cd2761b88bc"></div>
+  <div id="bottom-ad-slot"></div>
+</div>
+
+<style>
+  /* Fixed at bottom, centered */
+  #bottom-container {
+    position: fixed;       /* Stick to bottom of viewport */
+    bottom: 0;
+    left: 0;
+    width: 100%;           /* Full width */
+    text-align: center;    /* Center the ad */
+    z-index: 9998;         /* BELOW overlay (overlay z-index = 999999) */
+    padding: 8px 0;
+    background: #000;      /* Optional background */
+  }
+
+  #bottom-ad-slot {
+    display: inline-block;
+    margin: 0 auto;
+  }
+</style>
 
 <script>
 document.documentElement.classList.add("locked");
