@@ -891,27 +891,39 @@
 
 <div id="container-f61aad515a717738d5203cd2761b88bc"></div>
 
-
 <script>
-  window.addEventListener("load", function () {
-    setTimeout(function () {
-      const ad = document.getElementById("container-f61aad515a717738d5203cd2761b88bc");
-      const overlay = document.getElementById("adblock-overlay");
-      const title = document.getElementById("adblock-title");
-      const text = document.getElementById("adblock-text");
+  document.body.classList.add("adblock-locked");
 
-      if (!ad || ad.offsetHeight === 0 || ad.innerHTML.trim() === "") {
-        // Ad blocker detected
-        title.innerText = "Please disable your ad blocker";
-        text.innerHTML = "This site cannot be used while an ad blocker is enabled.<br>Disable it and refresh the page.";
-      } else {
-        // Ads loaded — allow site
-        overlay.style.display = "none";
-      }
-    }, 2500); // loading delay
-  });
+  // Fast adblock detection (does NOT wait for ad load)
+  setTimeout(function () {
+    const bait = document.createElement("div");
+    bait.className = "adsbox ad-banner ad-unit";
+    bait.style.height = "1px";
+    document.body.appendChild(bait);
+
+    const blocked = bait.offsetHeight === 0;
+    bait.remove();
+
+    const overlay = document.getElementById("adblock-overlay");
+    const title = document.getElementById("adblock-title");
+    const text = document.getElementById("adblock-text");
+
+    if (blocked) {
+      // Ad blocker ON — keep page locked
+      title.innerText = "Please disable your ad blocker";
+      text.innerHTML =
+        "This site cannot be used while an ad blocker is enabled.<br>Please disable it and refresh the page.";
+    } else {
+      // No ad blocker — allow access
+      overlay.classList.add("fade-out");
+      document.body.classList.remove("adblock-locked");
+
+      setTimeout(() => {
+        overlay.remove();
+      }, 600);
+    }
+  }, 800); // short loading delay
 </script>
-
 
 </body>
 </html>
