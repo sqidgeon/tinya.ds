@@ -879,33 +879,36 @@
 <div id="container-f61aad515a717738d5203cd2761b88bc"></div>
 
 <script>
-  document.documentElement.classList.add("locked");
+document.documentElement.classList.add("locked");
 
-  setTimeout(function () {
-    // Bait element (name still triggers blockers, but overlay won't be blocked)
-    const bait = document.createElement("div");
-    bait.className = "adsbox banner-unit sponsor";
-    bait.style.cssText = "height:1px;position:absolute;left:-9999px;";
-    document.body.appendChild(bait);
+// Run detection immediately
+(function(){
+  // bait element (safe name)
+  const bait = document.createElement("div");
+  bait.className = "sponsor-checker-unit";
+  bait.style.cssText = "height:1px;position:absolute;left:-9999px;";
+  document.body.appendChild(bait);
 
-    const blocked = bait.offsetHeight === 0;
-    bait.remove();
+  const blocked = bait.offsetHeight === 0;
+  bait.remove();
 
-    const guard = document.getElementById("page-guard");
-    const title = document.getElementById("guard-title");
-    const text = document.getElementById("guard-text");
+  const overlay = document.getElementById("page-guard");
+  const title = document.getElementById("guard-title");
+  const text = document.getElementById("guard-text");
 
-    if (blocked) {
-      title.textContent = "Please disable your ad blocker";
-      text.innerHTML =
-        "This site cannot be used while an ad blocker is enabled.<br>Disable it and refresh the page.";
-    } else {
-      guard.classList.add("fade-out");
+  if(blocked){
+    // Ad blocker detected — show warning
+    title.textContent = "Please disable your ad blocker";
+    text.innerHTML = "This site cannot be used while an ad blocker is enabled.<br>Disable it and refresh the page.";
+  } else {
+    // No ad blocker — fade out overlay after short delay
+    setTimeout(()=>{
+      overlay.classList.add("fade-out");
       document.documentElement.classList.remove("locked");
-
-      setTimeout(() => guard.remove(), 600);
-    }
-  }, 600);
+      setTimeout(()=>overlay.remove(), 600);
+    }, 800); // fade out after 0.8s
+  }
+})();
 </script>
 
 </body>
